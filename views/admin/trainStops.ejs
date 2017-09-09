@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<!-- Mirrored from seantheme.com/color-admin-v1.9/admin/html/extra_search_results.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 19 Oct 2015 11:27:06 GMT -->
+<head>
+    <% include static/head.ejs %>
+</head>
+
+<body>
+    
+    
+    <% if(status != ""){
+    %>
+            <script>
+                swal({
+                        title: '<%= status %>',
+                        text: '',
+                        type: 'success',
+                        confirmButtonText: 'Done!'
+                    },
+                    function () {});
+            </script>
+    <%
+        }
+        
+        status = "";
+        var vis = "none";
+
+    %>
+    
+    
+    
+    
+	<!-- begin #page-container -->
+	<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+		<!-- begin #header -->
+            <% include static/header.ejs %>
+        <!-- end #header -->
+		
+		<!-- begin #sidebar -->
+            <% include static/navbar.ejs %>
+        <!-- end #sidebar -->
+		
+		<!-- begin #content -->
+		<div id="content" class="content">
+			<!-- begin breadcrumb -->
+			<ol class="breadcrumb pull-right">
+				<li><a href="javascript:;">Home</a></li>
+				<li><a href="javascript:;">Trains</a></li>
+				<li class="active">Train Stops</li>
+			</ol>
+			<!-- end breadcrumb -->
+			<!-- begin page-header -->
+			<h1 class="page-header">Train Stopping Stations</h1>
+			<!-- end page-header -->
+			
+			<!-- begin row -->
+			<div class="row">
+			    <!-- begin col-12 -->
+			    <div class="col-md-12">
+			        <div class="result-container">
+                        <form method="post" action="./controller/selectedTrain">
+			            <div class="input-group m-b-20">
+                                <input list="Alltrains" type="text" name="t_id" class="form-control input-white" placeholder="Enter Train Name or Train Id" required />
+                                <datalist id="Alltrains">
+                                    <%
+                                        for (var i = 0; i < data.length; i++) { %>
+                                            <option value="<%= data[i].trainId+" : "+data[i].Name %>"></option>
+                                    <%    }
+
+                                    %>
+                                </datalist>
+
+
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-inverse"><i class="fa fa-search"></i> Search</button>
+                                </div>
+                           </div>
+                        </form>
+                        
+                        <%
+                            //tId = "asd : dsdf";
+                            var res = tId.split(" : ");
+                        %>
+                        
+                        <h4> <b>Train → <%= tId %></b> </h4>
+                        
+                        <% 
+                            var visible = "block";
+                            if( tId == "No Train Seleceted! " ){
+                                visible = "none";
+                            }
+                        %>
+                        
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-12" style="display:<%= visible %>">
+                            <!-- begin panel -->
+                            <div class="panel panel-inverse">
+                                <div class="panel-heading">
+
+                                    <h4 class="panel-title">Train Stopping Stations</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal2"><i class="fa fa-plus"></i> Add New Stop </button>
+                                    <br>
+                                    <br>
+                                    <table id="" class="display tableTrains table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Station ID </th>
+                                                <th>Station Name</th>
+                                                <th>Line Name</th>
+                                                <th>Arriving Time</th>
+                                                <th>Departure Time </th>
+                                                <th>Availability</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             <%
+                                            for (var i = 0; i < Stops.length; i++) {
+                                                                                    
+                                                %>
+                                            <tr data-id=" <%= Stops[i].id %>"  >
+                                                <td>
+                                                    <%= Stops[i].s_Id %>
+                                                </td>
+                                                <td>
+                                                    <%= Stops[i].name %>
+                                                </td>
+                                                <td>
+                                                    Main Line
+                                                </td>
+                                                <td>
+                                                    <%= Stops[i].arr %>
+                                                </td>
+                                                <td>
+                                                    <%= Stops[i].dept %>
+                                                </td>
+                                                <td>
+                                                    <%
+                                                        var day = "";
+                                                        switch (Stops[i].dayType) {
+                                                            case "0":
+                                                                day = "Daily";
+                                                                break;
+                                                            case "1":
+                                                                day = "Week Days";
+                                                                break;
+                                                            case "2":
+                                                                day = "Saturdays";
+                                                                break;
+                                                           case "3":
+                                                                day = "Saturdays and Sundays";
+                                                                break;
+                                                            case "4":
+                                                                day = "Sundays and Holidays";
+                                                                break;
+                                                            case "5":
+                                                                day = "Except Sundays and Holidays";
+                                                                break;
+                                                        }
+                                                        
+                                                    %>
+                                                    
+                                                    <%= day; %>
+                                                </td>
+                                                <td>
+                                                    <form action="./controller/deleteStop" method="post" enctype="application/x-www-form-urlencoded"  >
+                                                        <button type="button" name="editStop" onclick="getDetails(<%= Stops[i].id %>)" class="btn btn-primary btn-sm" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                                        <input class="form-control" type="hidden" name="id" data-parsley-required="true" value="<%= Stops[i].id %>" />
+                                                        <input class="form-control" type="hidden" name="t_id" data-parsley-required="true" value="<%= tId %>" />
+                                                        <button type="submit" id="mf2" onclick="return confirm('Are you sure you want to delete ?');" class="btn btn-warning btn-sm"><i class="fa fa-trash-o"></i> Delete</button>                                                                                
+                                                    </form>
+                                                                                    
+                                                </td>
+                                            </tr>
+                                                
+
+                                            <%    }
+                                                                            
+                                                %>
+                                        </tbody>    
+                                    </table>
+                                    
+
+                                </div>
+                            </div>
+                            <!-- end panel -->
+                        </div>
+                        
+                        
+                        
+                    </div>
+			    </div>
+			    <!-- end col-12 -->
+			</div>
+			<!-- end row -->
+		</div>
+		<!-- end #content -->
+        
+        
+        
+        
+    <!-- ##################################################     modals      ######################################################### -->
+
+    
+    <!--    New Line -->
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Insert New Stop</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- begin col-6 -->
+                        <div class="col-md-12">
+                            <!-- begin panel -->
+                            <div class="panel panel-inverse" data-sortable-id="form-validation-1">
+                                <div class="panel-body panel-form">
+                                    <form class="form-horizontal form-bordered" action="./controller/insertStop" method="post" enctype="application/x-www-form-urlencoded" data-parsley-validate="true" name="demo-form1">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Station Name:</label>
+                                            <input class="form-control" type="hidden" name="t_id" data-parsley-required="true" value="<%= res[0] %>" />
+                                            <div class="col-md-6 col-sm-6">
+                                                <select class="form-control" name="s_Id" data-parsley-required="true" value="">
+                                                    <%
+                                                        for (var i = 0; i < Stations.length; i++) { %>
+                                                            
+                                                            <option value="<%= Stations[i].s_Id %>"><%= Stations[i].name %></option>
+                                                            
+                                                    <%    }
+                                                    %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Arriving Time :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="arr" required value="" placeholder="13:55" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Departure Time  :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="dept" required value="" placeholder="13:55" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Availability :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType" value="0" checked="checked">Daily
+                                                </label>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType" value="1">Week Days
+                                                </label>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType" value="2">Saturdays
+                                                </label>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType" value="3">Sundays and Holidays
+                                                </label>
+                                                <br>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType" value="4">Saturdays and Sundays
+                                                </label>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType" value="5">Except Sundays and Holidays
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4"></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <button type="submit" class="btn btn-primary">Add to database</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end panel -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--    update Line -->
+    <div class="modal fade" id="myModal1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Train Stop</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- begin col-6 -->
+                        <div class="col-md-12">
+                            <!-- begin panel -->
+                            <div class="panel panel-inverse" data-sortable-id="form-validation-1">
+                                <div class="panel-body panel-form">
+                                    <form class="form-horizontal form-bordered" action="./controller/updateStop" method="post" enctype="application/x-www-form-urlencoded" data-parsley-validate="true" name="demo-form1">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3">Station Name:</label>
+                                            <input class="form-control" type="hidden" name="t_id" id="" data-parsley-required="true" value="<%= tId %>" />
+                                            <input class="form-control" type="hidden" name="id" id="rowId" data-parsley-required="true"  />
+                                            <div class="id_100 col-md-2 col-sm-2" >
+                                                <input class="form-control" type="text" name="s_Id_old" id="s_Id_old" readonly data-parsley-required="true" value="" placeholder="13:55" />
+                                                <input class="form-control" type="hidden" name="s_Id_old_id" id="s_Id_old_id" readonly data-parsley-required="true" value="" placeholder="13:55" />
+                                            </div>
+                                            <div class="id_100 col-md-2 col-sm-2">
+                                                <button type="button" class="btn btn-sm btn-warning" id="stopChange" onclick="setVisible('block');">Change</button>
+                                            </div>
+                                            <div class="id_100 col-md-3 col-sm-3" id="newStop" style="display:<%= vis %>">
+                                                <select class="form-control" name="s_Id" id="updateStation" data-parsley-required="true" value="" >
+                                                     <option value="" selected>Select a Station</option>
+                                                    <%
+                                                        for (var i = 0; i < Stations.length; i++) { %>
+                                                            
+                                                            <option value="<%= Stations[i].s_Id %>"><%= Stations[i].name %></option>
+                                                            
+                                                    <%  }
+                                                    %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Arriving Time :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="arr" id="arr" required value="" placeholder="13:55" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Departure Time  :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="dept" id="dept" required value="" placeholder="13:55" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Availability :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType1" value="0">Daily
+                                                </label>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType1" value="1">Week Days
+                                                </label>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType1" value="2">Saturdays
+                                                </label>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType1" value="3">Sundays and Holidays
+                                                </label>
+                                                <br>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType1" value="4">Saturdays and Sundays
+                                                </label>
+                                                <label class="radio-inline">
+                                                  <input type="radio" name="dayType1" value="5">Except Sundays and Holidays
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4"></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <button type="submit" class="btn btn-primary">Add to database</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end panel -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- ================== BEGIN BASE JS ================== -->
+        
+        
+		
+        		
+		<!-- begin scroll to top btn -->
+		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+		<!-- end scroll to top btn -->
+	</div>
+	<!-- end page container -->
+	
+	<!-- ================== BEGIN BASE JS ================== -->
+	<% include static/base.ejs %>
+    <script>
+        function getDetails(id) {
+            $('#myModal1').modal({
+                show: true
+            });
+
+            $.ajax({
+                url: './controller/getTrainStop',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: id
+                }),
+                dataType: "json",
+                success: function(response) {
+                        if (response.length > 0) {
+                            $.each(response, function(index, element) {
+                                $("input[name=dayType1][value='"+element.dayType+"']").prop("checked",true);
+//                                $('#updateStation').remove();
+                                $('#rowId').val(element.id);
+                                $('#s_Id_old').val(element.name);
+                                $('#s_Id_old_id').val(element.s_Id);
+                                //$('#updateStation').add($("<option></option>").attr("value","3006").text("Ja-ela"));
+                                $('.id_100 option[value='+element.s_Id+']').attr('selected','selected');
+                                $('#arr').val(element.arr);
+                                $('#dept').val(element.dept);
+                            });
+                        }
+                    }
+
+
+                    ,
+                error: function() {
+                    alert("error");
+                }
+
+            })
+            
+         };
+        
+            $("#newStop").hide();
+            function setVisible(data){
+                $("#newStop").show();
+            }
+        
+        
+    </script>
+
+
+    
+	<!-- ================== END PAGE LEVEL JS ================== -->
+	
+	<script>
+		$(document).ready(function() {
+			App.init();
+            $('table.display').DataTable();
+            //TableManageDefault.init();
+		});
+	</script>
+	<script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','../../../../www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-53034621-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+</body>
+
+<!-- Mirrored from seantheme.com/color-admin-v1.9/admin/html/extra_search_results.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 19 Oct 2015 11:27:06 GMT -->
+</html>
+

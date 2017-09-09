@@ -1,0 +1,73 @@
+<!-- 
+Invoice dynamically rendered into html using handlebars and converted into pdf
+using phantom-pdf recipe. The styles are extracted into separate asset for 
+better readability and later reuse.
+
+Data to this sample are mocked at the design time and should be filled on the 
+incoming API request.
+!-->
+
+<style>
+    {#asset Invoice styles.css @encoding=utf8}
+</style>
+
+<div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td colspan = "2">
+                            <center>
+                                <img style="float:right" src="{#asset logo.png @encoding=dataURI}" width="300" />
+                                <h1> Contributor Details</h1>
+                                <hr>
+                                {{#each con}}
+                                <h2 style="text-align:left">Contributor: {{name}} <br>
+                                    <br>
+                                    <small>{{start}} to {{end}}</small>
+                                </h2>
+                                {{/each}}
+                            </center>
+                            
+                        </td>
+                        
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <h3>Contribution Details</h3>
+    <table>
+        <tr class="heading">
+            <td>
+                <center>Date</center>
+            </td>
+            <td>
+                <center>Starting Location</center>
+            </td>
+            <td>
+                <center>Ending Location</center>
+            </td>
+            <td>
+                <center>Contributing Time Period</center>
+            </td>
+        </tr>
+        {{#each contribute}}
+        <tr class="item">
+            <td>
+                <center>{{date}}</center>
+            </td>
+            <td>
+               <center> {{start}}</center>
+            </td>
+            <td>
+                <center>{{end}}</center>
+            </td>
+            <td>
+               <center> {{time}}</center>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+</div>

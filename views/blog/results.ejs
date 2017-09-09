@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<% include static/head.ejs %>
+    <link rel="stylesheet" href="/stylesheets/frontend/ion.rangeSlider.css">
+    <link rel="stylesheet" href="/stylesheets/frontend/iion.rangeSlider.skinHTML5.css">
+    <link rel="stylesheet" href="/stylesheets/frontend/ion.rangeSlider.skinFlat.css">
+    <link rel="stylesheet" href="/stylesheets/frontend/ion.rangeSlider.skinModern.css">
+    <link rel="stylesheet" href="/stylesheets/frontend/ion.rangeSlider.skinNice.css">
+    <link rel="stylesheet" href="/stylesheets/frontend/ion.rangeSlider.skinSimple.css">
+
+    <body>
+
+        <!--  preloader start -->
+        <div id="tb-preloader">
+            <div class="tb-preloader-wave"></div>
+        </div>
+        <!-- preloader end -->
+
+
+        <div class="wrapper">
+
+            <!--header start-->
+            <% include static/header.ejs %>
+                <!--header end-->
+
+
+                <!--page title start-->
+                <section class="page-title">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="text-uppercase">Search Results</h4>
+                                <ol class="breadcrumb">
+                                    <li><a href="#">Home</a>
+                                    </li>
+                                    <li><a href="#">Trains</a>
+                                    </li>
+                                    <li class="active">Train Timetable</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--page title end-->
+
+                <!--body content start-->
+                <section class="body-content ">
+
+                    <div class="page-content">
+                        <div class="container">
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <div class="heading-title-alt text-center ">
+                                        <h3 class="text-uppercase ">Trains - <b style="color:#d6b161"><%= start[0].name%></b> <small>to</small> <b><%= end[0].name%></b></h3>
+                                    </div>
+                                    <table class="table table-striped text-center">
+                                        <thead>
+                                            <tr style="text-align:center">
+                                                <th>
+                                                    <center>Arrive Time</center>
+                                                </th>
+                                                <th>
+                                                    <center>Depart Time</center>
+                                                </th>
+                                                <th>
+                                                    <center>Reach Destination</center>
+                                                </th>
+                                                <th>
+                                                    <center>Frequency</center>
+                                                </th>
+                                                <th>
+                                                    <center>Train Type</center>
+                                                </th>
+                                                <th>
+                                                    <center>Status</center>
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <%
+                                    for (var i = 0; i < data.length; i++) { 
+                                        
+                                        var dayType = 0;
+                                        var day = "";
+                                        if(parseInt(data[i].c3) == parseInt(data[i].c5)){
+                                            dayType = parseInt(data[i].c3);
+                                        }
+                                        else if(parseInt(data[i].c5)>parseInt(data[i].c3) ){
+                                            dayType = parseInt(data[i].c5);
+                                        }
+                                        else if(parseInt(data[i].c3) > parseInt(data[i].c5)){
+                                            dayType = parseInt(data[i].c3);
+                                        }
+                                        
+                                        switch (dayType) {
+                                            case 0:
+                                                day = "Daily";
+                                                break;
+                                            case 1:
+                                                day = "Week Days";
+                                                break;
+                                            case 2:
+                                                day = "Saturdays";
+                                                break;
+                                            case 3:
+                                                day = "Saturdays and Sundays";
+                                                break;
+                                            case 4:
+                                                day = "Sundays and Holidays";
+                                                break;
+                                            case 5:
+                                                day = "Except Sundays and Holidays";
+                                                break;
+                                        }
+                                        
+                                        
+                                        
+                                        
+                                        %>
+                                                <tr>
+                                                    <th>
+                                                        <center>
+                                                            <%= data[i].c1%>
+                                                        </center>
+                                                    </th>
+                                                    <td>
+                                                        <%= data[i].c2%>
+                                                    </td>
+                                                    <td>
+                                                        <%= data[i].c4%>
+                                                    </td>
+                                                    <td>
+                                                        <%= day %>
+                                                    </td>
+                                                    <td>Express</td>
+                                                    <td><b style="color:green">On Time</b></td>
+                                                    <td><button type="submit" class="btn btn-xs btn-theme-color" onclick="show(<%= data[i].t_Id %>);"><i class="fa fa-eye"></i> View</button></td>
+                                                    <!--                                            <td><button type="submit" class="btn btn-xs btn-theme-color" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye"></i> View</button></td>-->
+                                                </tr>
+
+
+
+                                                <%    }
+                                    
+                                   %>
+
+                                        </tbody>
+                                    </table>
+
+                                    <div class="divider d-solid d-single text-center">
+                                        <span class="dot"> </span>
+                                    </div>
+
+                                    <section class="body-content ">
+
+
+
+
+
+                                    </section>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </section>
+                <!--body content end-->
+
+                <!--footer start 1-->
+                <% include static/footer.ejs %>
+                    <!--footer 1 end-->
+
+        </div>
+
+        <div id="myModal" class="modal fade" role="dialog" style="z-index:99999">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Train Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            <div class="panel">
+
+
+
+                                <dl class="dl-horizontal">
+                                    <dt style="line-height: 290%;">Train No</dt>
+                                    <dd style="line-height: 290%;">4001A</dd>
+                                    <hr>
+                                    <dt style="line-height: 290%;">Train Name</dt>
+                                    <dd style="line-height: 290%;"> ICE,Daily,MRD/MTR </dd>
+                                    <hr>
+                                    <dt style="line-height: 290%;">Train Ends </dt>
+                                    <dd style="line-height: 290%;"><b>Matara</b> | at <b>08:00</b></dd>
+                                    <hr>
+                                    <dt style="line-height: 290%;">Current Location</dt>
+                                    <dd style="line-height: 290%;">-</dd>
+                                    <hr>
+                                    <dt style="line-height: 290%;">Next Station</dt>
+                                    <dd style="line-height: 290%;">-</dd>
+                                    <hr>
+                                </dl>
+                            </div>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- inject:js -->
+        <% include static/base.ejs %>
+
+
+            <!--
+    <script src="/vendor/images-loaded/imagesloaded.js"></script>
+    <script src="/vendor/isotope/jquery.isotope.js"></script>
+    <script src="/vendor/menuzord/menuzord.js"></script>
+    <script src="/vendor/owl-carousel/owl.carousel.min.js"></script>
+    <script src="/vendor/sticky/jquery.sticky.min.js"></script>
+    <script src="/vendor/visible/visible.js"></script>
+-->
+            <script>
+                function show(id) {
+                    $('#myModal').modal();
+                    
+                    $.ajax({
+                    url: './controller/getStation',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({t_Id:id}),
+                    dataType: "json",
+                    success: function (response) {
+                       if (response.length > 0)
+                       {
+                          $.each(response, function(index, element) {
+                                $('#stationId').val(element.s_Id);
+                                $('#sName').val(element.name);
+                                $('#lName').val(element.lineid);
+                                $('input[class="train_line1"][value="' + element.lineid + '"]').attr('checked', 'checked');
+                                $('#cNo').val(element.contact);
+                                $('#lang').val(element.longa);
+                                $('#long').val(element.lang);
+                          });
+                       }
+                    }
+
+
+                    ,
+                    error:function()
+                    {
+                        alert("error");
+                    }
+
+                })
+                }
+
+            </script>
+
+            <!-- endinject 
+</body>
+
+
+<!-- Mirrored from massive.markup.themebucket.net/shortcode-tables.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Apr 2017 20:01:57 GMT -->
+
+</html>

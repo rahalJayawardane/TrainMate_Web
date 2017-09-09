@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<% include static/head.ejs %>
+
+    
+    
+    <body>
+
+        <!--  preloader start -->
+        <div id="tb-preloader">
+            <div class="tb-preloader-wave"></div>
+        </div>
+        <!-- preloader end -->
+
+
+        <div class="wrapper">
+
+            <!--header start-->
+            <header class="l-header">
+                <% include static/header.ejs %>
+            </header>
+            <!--header end-->
+
+            <!--page title start-->
+            <section class="page-title">
+                <div class="container">
+                    <h4 class="text-uppercase"> Train Search</h4>
+                    <ol class="breadcrumb">
+                        <li><a href="#">Home</a>
+                        </li>
+                        <li><a href="#">Time Table</a>
+                        </li>
+                        <li class="active">Train Search</li>
+                    </ol>
+                </div>
+            </section>
+            <!--page title end-->
+
+            <!--body content start-->
+            <section class="body-content ">
+                <div class="page-content">
+                    <div class="container">
+                        <div class="row">
+                                                    
+                            <div class="col-md-6 col-md-offset-3">
+                                
+                                <div class="alert alert-danger" role="alert" id="error1">
+                                    <i class="fa fa-lg fa-times-circle"></i>  <strong>Error!</strong> You cannot select same station for start and end.
+                                </div>
+                                <div class="alert alert-danger" role="alert" id="error2">
+                                    <i class="fa fa-lg fa-times-circle"></i>  <strong>Error!</strong> You did not select a start location.
+                                </div>
+                                <div class="alert alert-danger" role="alert" id="error3">
+                                    <i class="fa fa-lg fa-times-circle"></i>  <strong>Error!</strong> You did not select a end location.
+                                </div>
+                                <div class="alert alert-danger" role="alert" id="error4">
+                                    <i class="fa fa-lg fa-times-circle"></i>  <strong>Error!</strong> select start and end locations.
+                                </div>
+                                
+                                <dl class="accordion login-accordion">
+                                    <dt>
+                                        <a href="#">Quick Search</a>
+                                    </dt>
+                                    <dd>
+                                        <div class="login register ">
+                                            <div class=" btn-rounded">
+                                                <form class="" action="./search" method="post" onsubmit="return Check()">
+
+                                                    <div class="form-group">
+                                                        <lable>Start Station: </lable>
+                                                        <select class="form-control" name="start" id="start" placeholder="Login ID">
+                                                            <option value="">Select a Station</option>
+                                                            <%
+                                                                for (var i = 0; i < data.length; i++) { %>
+                                                                    <option value="<%= data[i].s_Id%>"><%= data[i].name %></option>
+                                                            <%    }
+
+                                                            %>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <lable>End Station: </lable>
+                                                        <select class="form-control" name="end" id="end" placeholder="Login ID">
+                                                            <option value="">Select a Station</option>
+                                                            <%
+                                                                for (var i = 0; i < data.length; i++) { %>
+                                                                    <option value="<%= data[i].s_Id%>"><%= data[i].name %></option>
+                                                            <%    }
+
+                                                            %>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-small  btn-theme-color full-width">
+                                                            <i class="fa fa-search"></i> Search
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    
+
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </dd>
+                                    <dt>
+                                        <a href="#">Advance Search</a>
+                                    </dt>
+                                    <dd>
+                                        <form class=" login" action="#" method="post">
+
+                                            <div class="form-group">
+                                                <lable>Start Station: </lable>
+                                                <select class="form-control" placeholder="Login ID">
+                                                    <option>Maradana</option>
+                                                    <option>Dematagoda</option>
+                                                    <option>Ragama</option>
+                                                    <option>Jaela</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <lable>End Station: </lable>
+                                                <select class="form-control" placeholder="Login ID">
+                                                    <option>Maradana</option>
+                                                    <option>Dematagoda</option>
+                                                    <option>Ragama</option>
+                                                    <option>Jaela</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <lable>Day Type: </lable>
+                                                <select class="form-control" placeholder="Login ID">
+                                                    <option>Week Day</option>
+                                                    <option>Saturday</option>
+                                                    <option>Sunday / Holiday</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <a href="#" class="btn btn-small  btn-theme-color full-width"><i class="fa fa-search"></i>  Search</a>
+                                            </div>
+                                            
+                                            
+
+
+                                        </form>
+                                    </dd>
+
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </section>
+            <!--body content end-->
+
+            <!--footer -->
+            <% include static/footer.ejs %>
+                <!--footer-->
+
+        </div>
+
+
+        <!-- inject:js -->
+        <% include static/base.ejs %>
+        <script>
+            $(document).ready(function(){
+                $('#error1').hide();
+                $('#error2').hide();
+                $('#error3').hide();
+                $('#error4').hide();
+            });
+            
+            
+            
+            function Check(){
+                
+                var start = $('#start').find(":selected").val();;
+                var end = $('#end').find(":selected").val();
+                var error = true;
+                
+                if(end!="" && start==""){
+                    $('#error2').show();
+                    $('#error3').hide();
+                    $('#error1').hide();
+                    $('#error4').hide();
+                    error = false;
+                }
+                if(end=="" && start!=""){
+                    $('#error3').show();
+                    $('#error2').hide();
+                    $('#error1').hide();
+                    $('#error4').hide();
+                    error = false;
+                }
+                if(end!="" && start!="" && (start==end)){
+                    $('#error1').show();
+                    $('#error2').hide();
+                    $('#error3').hide();
+                    $('#error4').hide();
+                    error = false;
+                }
+                if(end=="" && start==""){
+                    $('#error4').show();
+                    $('#error2').hide();
+                    $('#error3').hide();
+                    $('#error1').hide();
+                    error = false;
+                }
+                
+                return error;
+                
+                
+            }
+        </script>
+            <!-- endinject -->
+    </body>
+
+
+    <!-- Mirrored from massive.markup.themebucket.net/login-register-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 13 Apr 2017 19:59:46 GMT -->
+
+</html>

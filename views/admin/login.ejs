@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<% include static/head.ejs%>
+    
+    
+<body class="pace-top bg-black">
+	<!-- begin #page-container -->
+	<div id="page-container" class="fade" >
+	    <!-- begin login -->
+        <div class="login login-with-news-feed">
+            <!-- begin news-feed -->
+            <div class="news-feed">
+                <div class="news-image">
+                    <img src="/images/login-bg/bg-9.jpg" data-id="login-cover-image" alt="" />
+                    <div class="login-cover-bg"></div>
+                    <img src="/images/trainMate.png" alt="" width="200" />
+                    
+                </div>
+                <div class="news-caption">
+                    <center><h4 class="caption-title"><i class="fa fa-train text-success"></i>   |   TrainMate - Train Management System </h4></center>
+                    <p>
+                        
+                    </p>
+                </div>
+            </div>
+            <!-- end news-feed -->
+            <!-- begin right-content -->
+            <div class="right-content" >
+                <!-- begin login-header -->
+                <div class="login-header">
+                    <div class="brand" style="color:#fff">
+                        <b>Admin Panel</b>
+                        <small style="color:#fff">Controlling Back-End</small>
+                    </div>
+                    <div class="icon">
+                        <i style="color:#fff" class="fa fa-sign-in"></i>
+                    </div>
+                </div>
+                <!-- end login-header -->
+                <!-- begin login-content -->
+                <div class="login-content">
+                    <form action="/admin/index" method="POST" class="margin-bottom-0">
+                        <div class="form-group m-b-15">
+                            <input type="text" class="form-control input-lg" name="email" placeholder="User Name" />
+                        </div>
+                        <div class="form-group m-b-15">
+                            <input type="password" class="form-control input-lg" name="pass" placeholder="Password" />
+                        </div>
+                        <div class="checkbox m-b-30">
+                            <label style="color:#fff">
+                                <input type="checkbox" name="cookie" /> Remember Me
+                            </label>
+                        </div>
+                        <div class="login-buttons">
+                            <button type="submit" class="btn btn-primary btn-block btn-lg">Sign me in</button>
+                        </div>
+                        <div class="m-t-20 m-b-40 p-b-40" style="color:#fff">
+                            Don't have an Account? Contact the Developers.
+                        </div>
+                        <div class="note note-danger" style="display:<%= msg %>">
+								<center><h4>Credentials are Wrong!</h4></center>
+								<p>
+								    Something missing in your email address or password! Please check the credentials again. Otherwise please contact
+                                    Cybersoft Developers!!
+                                </p>
+						</div>
+                        
+                        
+                        <hr />
+                        <p class="text-center" style="color:#fff">
+                            &copy; All Right Reserved 2017<br>
+                            <img src="/images/logo-GP.png" alt="" width="400" />
+                    
+                        </p>
+                    </form>
+                </div>
+                <!-- end login-content -->
+            </div>
+            <!-- end right-container -->
+        </div>
+        <!-- end login -->
+        
+	</div>
+	<!-- end page container -->
+	
+	<!-- ================== BEGIN BASE JS ================== -->
+	<% include static/base.ejs %>
+	<!-- ================== END PAGE LEVEL JS ================== -->
+
+	<script>
+		$(document).ready(function() {
+			App.init();
+		});
+	</script>
+	<script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','../../../../www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-53034621-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+</body>
+
+<!-- Mirrored from seantheme.com/color-admin-v1.9/admin/html/login_v2.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 19 Oct 2015 11:29:07 GMT -->
+</html>
+

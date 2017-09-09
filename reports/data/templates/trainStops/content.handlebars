@@ -1,0 +1,68 @@
+<!-- 
+Invoice dynamically rendered into html using handlebars and converted into pdf
+using phantom-pdf recipe. The styles are extracted into separate asset for 
+better readability and later reuse.
+
+Data to this sample are mocked at the design time and should be filled on the 
+incoming API request.
+!-->
+
+<style>
+    {#asset Invoice styles.css @encoding=utf8}
+</style>
+
+<div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td colspan = "2">
+                            <center>
+                                <img src="{#asset logo.png @encoding=dataURI}" width="400" />
+                                <h1> Train Schedule</h1>
+                                {{#each train}}
+                                <h2>No: {{T_name}}</h2>
+                                {{/each}}
+                            </center>
+                            
+                        </td>
+                        
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr class="heading">
+            <td>
+                <center>Station Id</center>
+            </td>
+            <td>
+                <center>Station Name</center>
+            </td>
+            <td>
+                <center>Arriving Time</center>
+            </td>
+            <td>
+                <center>Departing Time</center>
+            </td>
+        </tr>
+        {{#each trainStops}}
+        <tr class="item">
+            <td>
+                <center>{{id}}</center>
+            </td>
+            <td>
+               <center> {{name}}</center>
+            </td>
+            <td>
+                <center>{{arr}}</center>
+            </td>
+            <td>
+               <center> {{dept}}</center>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+</div>

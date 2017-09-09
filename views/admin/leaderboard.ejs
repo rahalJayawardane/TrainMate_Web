@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+
+    
+
+<head>
+    <% include static/head.ejs %>
+</head>
+
+<body>
+    
+    
+<!--    Send Notification   -->
+    <% if(status != ""){
+    %>
+            <script>
+                swal({
+                        title: '<%= status %>',
+                        text: '',
+                        type: 'success',
+                        confirmButtonText: 'Done!'
+                    },
+                    function () {});
+            </script>
+    <%
+        }
+        
+        status = "";
+
+    %>
+    
+    
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
+
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+        <!-- begin #header -->
+            <% include static/header.ejs %>
+        <!-- end #header -->
+
+            <!-- begin #sidebar -->
+                <% include static/navbar.ejs %>
+            <!-- end #sidebar -->
+
+                <!-- begin #content -->
+                <div id="content" class="content">
+
+                    <!-- begin breadcrumb -->
+                    <ol class="breadcrumb pull-right">
+                        <li><a href="">Home</a></li>
+                        <li><a href="">Contributors</a></li>
+                        <li class="active">LeaderBoard</li>
+                    </ol>
+                    <!-- end breadcrumb -->
+
+                    <h1 class="page-header">LeaderBoard</h1>
+                    <div class="row">
+                        <!-- begin col-12 -->
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <!-- begin panel -->
+                            <div class="panel panel-inverse">
+                                <div class="panel-heading">
+
+                                    <h4 class="panel-title">Contributors Details</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <table id="data-table" class="tableTrains table table-striped table-bordered">
+                                        <col width="500">
+                                        <col width="100">
+                                        <col width="50">
+                                        <col width="50">
+                                        <col width="150">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name </th>
+                                                                        <th>Month</th>
+                                                                        <th>Score</th>
+                                                                        <th>No of Contributions</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <%
+                                                                            for (var i = 0; i < data.length; i++) { 
+                                                                                
+                                                                        %>
+                                                                        <tr data-id=" <%= data[i].id %>"  >
+                                                                            <td>
+                                                                                <%= data[i].name %>
+                                                                            </td>
+                                                                            <td>
+                                                                                March 2017
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= parseInt(data[i].noOfContributions)*20 %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= data[i].noOfContributions %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" onclick="getDetails(<%= data[i].id %>)" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> View Details</button> 
+                                                                                
+                                                                            </td>
+                                                                        </tr>
+
+
+                                                                        <%    }
+                                                                        
+                                                                        %>
+
+                                                                </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <!-- end panel -->
+                        </div>
+                        <!-- end col-12 -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end #content -->
+
+                <!-- begin scroll to top btn -->
+                <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+                <!-- end scroll to top btn -->
+    </div>
+    <!-- end page container -->
+
+
+    <!-- ##################################################     modals      ######################################################### -->
+
+    <!--    update Line -->
+    <div class="modal fade" id="myModal1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Contributor Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- begin col-6 -->
+                        <div class="col-md-12">
+                            <!-- begin panel -->
+                            <div class="panel panel-inverse" data-sortable-id="form-validation-1">
+                                <div class="panel-body panel-form">
+                                    <form class="form-horizontal form-bordered" action="./controller/updateContributor" method="post" enctype="application/x-www-form-urlencoded" data-parsley-validate="true" name="demo-form1">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Contributor ID:</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" id="conId" name="id" data-parsley-required="true" readonly value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Contributor Name :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" id="name" name="name" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Email :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="email" id="email" name="email" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Contact No :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" id="cNo" name="contactNo" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4"></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <button type="submit" class="btn btn-primary">Update database</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end panel -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <% include static/base.ejs %>
+        <script>
+            
+            
+            function getDetails(id){
+                $('#myModal1').modal({
+                    show: true
+                });
+                
+                $.ajax({
+                    url: './controller/getContributor', 
+                    type: 'POST', 
+                    contentType: 'application/json', 
+                    data: JSON.stringify({id:id}),
+                    dataType: "json",
+                    success: function (response) {
+                       if (response.length > 0)
+                       {
+                          $.each(response, function(index, element) {
+                                $('#conId').val(element.id);
+                                $('#name').val(element.name);
+                                $('#email').val(element.email);
+                                $('#cNo').val(element.contactNo);
+                          });
+                       }
+                    }
+                    
+                    
+                    ,
+                    error:function()
+                    {
+                        alert("error");
+                    }
+                
+                })
+                
+                
+            
+            };
+            
+            
+                
+            
+        </script>
+        <!-- ================== END PAGE LEVEL JS ================== -->
+
+        <script>
+            $(document).ready(function () {
+
+
+                App.init();
+                TableManageDefault.init();
+                
+
+
+            });
+        </script>
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '../../../../www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-53034621-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+
+
+
+
+</body>
+
+</html>

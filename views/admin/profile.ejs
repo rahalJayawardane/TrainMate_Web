@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+
+    
+
+<head>
+    <% include static/head.ejs %>
+</head>
+
+<body>
+    
+    
+<!--    Send Notification   -->
+   
+    
+    
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
+
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+        <!-- begin #header -->
+            <% include static/header.ejs %>
+        <!-- end #header -->
+
+            <!-- begin #sidebar -->
+                <% include static/navbar.ejs %>
+            <!-- end #sidebar -->
+
+                <!-- begin #content -->
+                <div id="content" class="content">
+
+                    <!-- begin breadcrumb -->
+                    <ol class="breadcrumb pull-right">
+                        <li><a href="">Home</a></li>
+                        <li class="active">Profile Page</li>
+                    </ol>
+                    <!-- end breadcrumb -->
+
+                    <div class="row">
+                        <!-- begin page-header -->
+                        <h1 class="page-header">Profile Page <small></small></h1>
+                        <!-- end page-header -->
+                        <!-- begin profile-container -->
+                        <div class="profile-container">
+                            <!-- begin profile-section -->
+                            <div class="profile-section">
+                                <!-- begin profile-left -->
+                                <div class="profile-left">
+                                    <!-- begin profile-image -->
+                                    <div class="profile-image">
+                                        <img src="/<%= img %>" width="100%" />
+
+                                    </div>
+                                    <!-- end profile-image -->
+                                    <div class="m-b-10">
+                                        <a data-toggle="modal" data-target="#PicNew" class="btn btn-warning btn-block btn-sm">Change Picture</a>
+                                    </div>
+                                </div>
+                                <!-- end profile-left -->
+                                <!-- begin profile-right -->
+                                <div class="profile-right">
+                                    <!-- begin profile-info -->
+                                    <div class="profile-info">
+                                        <!-- begin table -->
+                                        <div class="table-responsive">
+                                            <table class="table table-profile">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>
+                                                            <h4><%= userName %> <small><%= pos %></small></h4>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="field">Name</td>
+                                                        <td>
+                                                            <%= userName %>  
+                                                        </td>
+                                                       <td>
+                                                        <a data-toggle="modal" data-target="#FNameNew" class="m-l-5"> <i class="fa fa-pencil fa-lg m-r-5"></i> Edit</a>
+                                                       </td>
+                                                    </tr>
+                                                    <tr class="highlight">
+                                                        <td class="field">Email</td>
+                                                        <td>
+                                                            <%= data[0].email %>
+                                                        </td>
+                                                        <td>
+                                                            <a data-toggle="modal" data-target="#emailNew"class="m-l-5"> <i class="fa fa-pencil fa-lg m-r-5"></i> Edit</a>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr >
+                                                        <td class="field">Position</td>
+                                                        <td >
+                                                            <%= pos %>
+                                                        </td>
+                                                        <td>
+                                                            <a data-toggle="modal" data-target="#posNew" class="m-l-5"> <i class="fa fa-pencil fa-lg m-r-5"></i> Edit</a>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="field">Password</td>
+                                                        <td><a data-toggle="modal" data-target="#PWNew">Change here</a></td>
+                                                        <input type="hidden" id="CID" value="<%= data[0].id %>">
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- end table -->
+                                    </div>
+                                    <!-- end profile-info -->
+                                </div>
+                                <!-- end profile-right -->
+                            </div>
+                            <!-- end profile-section -->
+
+                        </div>
+                        <!-- end profile-container -->
+                        <!-- end col-12 -->
+                    </div>
+                    <!-- end row -->
+                    
+                </div>
+                <!-- end #content -->
+
+                <!-- begin scroll to top btn -->
+                <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+                <!-- end scroll to top btn -->
+    </div>
+    <!-- end page container -->
+    
+    
+    
+    
+    <!--	########################################################################################################################################################	-->
+		
+		<!--	First Name	-->
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="FNameNew" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+						<h4 id="myLargeModalLabel2" class="modal-title">Name</h4>
+					</div>
+                    
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+								<form action="./controller/updateName" method="post">
+                                    <div class="row input-group margin-bottom-20" style="padding-bottom:10px;">
+										<span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <input type="hidden" placeholder="First Name" name="CID" class="form-control" value="<%= data[0].id  %>">
+										<input type="text" id="FnameNew1" name="name" placeholder="First Name" class="form-control" value="<%= userName %>" required><br>
+									</div>
+									<div class="row">
+                                        <input type="submit" class="btn btn-success btn-sm" style="float:right" value="Change Name">
+										
+									</div>    
+                                </form>
+							</div>
+						</div><!--/row-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!--	Email	-->
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="emailNew" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+						<h4 id="myLargeModalLabel2" class="modal-title">Email</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+									<div class="row input-group margin-bottom-20" style="padding-bottom:10px;">
+										<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+										<input type="email" id="email" placeholder="Email" value="<%= data[0].email %>" class="form-control" required><br>
+										
+									</div>
+									<div id="msgerror" class="alert alert-danger fade in">
+										<strong>Email has already an account.</strong> Please check your email again!.
+
+									</div>
+									<div class="row">
+										<button class="btn btn-success btn-sm" style="float:right" id="newEmail" >Change Email</button>
+
+									</div>
+							</div>
+						</div><!--/row-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!--	Position	-->
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="posNew" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+						<h4 id="myLargeModalLabel2" class="modal-title">Position</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+                                <form action="./controller/updatePosition" method="post">
+                                    <div class="row input-group margin-bottom-20" style="padding-bottom:10px;">
+										<span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <input type="hidden" placeholder="First Name" name="CID" class="form-control" value="<%= data[0].id  %>">
+										<input type="text" id="pos" placeholder="Position" name="pos" class="form-control" value="<%= pos %>" required><br>
+									</div>
+									<div class="row">
+                                        <input type="submit" class="btn btn-success btn-sm" style="float:right" value="Change Position">
+										
+
+									</div>
+                                </form>
+									
+							</div>
+						</div><!--/row-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!--	Password	-->
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="PWNew" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+						<h4 id="myLargeModalLabel2" class="modal-title"> New Password </h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+									<div class="input-group margin-bottom-20">
+										<span class="input-group-addon"><i class="fa fa-key"></i></span>
+										<input type="password" id="pwNew" placeholder="New Password" class="form-control" required>
+									</div>
+									<div class="input-group margin-bottom-20" style="padding-top:10px;padding-bottom:10px;">
+										<span class="input-group-addon"><i class="fa fa-key"></i></span>
+										<input type="password" id="rePw" placeholder="Re-type New Password" class="form-control" required>
+									</div>
+
+									<div id="msgerror2" class="alert alert-danger fade in" >
+										<strong>Password need to be more than 6 charachers.</strong>
+
+									</div>
+									<div id="msgerror3" class="alert alert-danger fade in">
+										<strong>Password are not maching.</strong> Please check your password again!.
+
+									</div>
+									<div class="row" style="padding-top:10px;">
+										<button class="btn btn-success btn-sm" style="float:right" id="newpw" > Change password </button>
+
+									</div>
+							</div>
+						</div><!--/row-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<!--=== modal change profile pic ===-->
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="PicNew" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+						<h4 id="myLargeModalLabel2" class="modal-title">Profile Picture</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<form action="./controller/uploadImg" method="post" enctype="multipart/form-data">
+								<div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+									<div class="input-group margin-bottom-20" style="padding-bottom:10px;">
+										<span class="input-group-addon"><i class="fa fa-picture-o" ></i></span>
+											<input type="file" name="imageUser" id="file" accept="image/*" placeholder="browse.." class="form-control" required>
+											<input type="hidden" id="CID" name="id" value="<%= data[0].id %>">
+									</div>
+									<div class="row">
+										<button type="submit"  style="float:right" class="btn btn-success btn-sm" >Change Profile Picture</button>
+									</div>
+								</div>
+							</form>
+						</div><!--/row-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+<!--	#############################################################################################################################################################	-->
+
+
+    
+    <!-- ================== BEGIN BASE JS ================== -->
+    <% include static/base.ejs %>
+        
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+        <script>
+            $(document).ready(function () {
+
+
+                App.init();
+                TableManageDefault.init();
+                
+                
+                
+                var CID = $('#CID').val();
+                $("#msgerror").hide();
+                $("#msgerror2").hide();
+                $("#msgerror3").hide();
+
+                
+
+
+                // send new email
+                $('#newEmail').click(function(){
+                    var newEmail = $('#email').val();
+                    if(newEmail != ""){
+                        $.ajax({
+                            url: "./controller/updateEmail",
+                            method: "POST",
+                            data:{CID:CID,newEmail:newEmail},
+                            dataType:"text",
+                            success:function(html){
+                                var status = html;
+                                if( status == "true"){
+                                    window.location.href='/admin/profile';
+                                }
+                                else if( status == "already"){
+                                    $("#msgerror").show();
+                                }
+                                else{
+                                    //window.location.href='error.php';
+                                }
+                            }
+
+                        });
+                    }
+                });
+
+
+                
+                // send new password
+                $('#newpw').click(function(){
+                            var name1 = $('#pwNew').val();
+                            var name2 = $('#rePw').val();
+
+                            if(name1.length < 6 && name1.localeCompare(name2) != 0 ){
+                                $("#msgerror3").show();
+                                $("#msgerror2").show();
+                            }
+                            else if(name1.length < 6 && name1.localeCompare(name2) == 0){
+                                $("#msgerror2").show();
+                                $("#msgerror3").hide();
+                            }
+                            else if(name1.length >= 6 && name1.localeCompare(name2) != 0){
+                                $("#msgerror3").show();
+                                $("#msgerror2").hide();
+                            }
+
+                            else if(name1.length >= 6 && name1.localeCompare(name2) == 0){
+                                $.ajax({
+                                        url: "./controller/updatePassword",
+                                        method: "POST",
+                                        data:{CID:CID,newPw:name1},
+                                        dataType:"text",
+                                        success:function(html){
+                                            var status = html;
+                                            if( status == "true"){
+                                                window.location.href='/admin/profile';
+                                            }
+                                            else{
+//                                                window.location.href='error.php';
+                                            }
+                                            //$('#Avali').html(msg);
+                                        }
+
+                                });
+                            }
+
+                });
+                
+                
+                
+
+
+            });
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </script>
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '../../../../www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-53034621-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+
+
+
+
+</body>
+
+</html>

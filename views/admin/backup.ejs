@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+
+    
+
+<head>
+    <% include static/head.ejs %>
+</head>
+
+<body>
+    
+    
+<!--    Send Notification   -->
+   <% if(status != ""){
+    %>
+            <script>
+                swal({
+                        title: '<%= status %>',
+                        text: '',
+                        type: 'success',
+                        confirmButtonText: 'Done!'
+                    },
+                    function () {});
+            </script>
+    <%
+        }
+        
+        status = "";
+
+    %>
+    
+    
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
+
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+        <!-- begin #header -->
+            <% include static/header.ejs %>
+        <!-- end #header -->
+
+            <!-- begin #sidebar -->
+                <% include static/navbar.ejs %>
+            <!-- end #sidebar -->
+
+                <!-- begin #content -->
+                <div id="content" class="content">
+
+                    <!-- begin breadcrumb -->
+                    <ol class="breadcrumb pull-right">
+                        <li><a href="">Home</a></li>
+                        <li class="active">Backup &amp; Restore Tables</li>
+                    </ol>
+                    <!-- end breadcrumb -->
+
+                    <div class="row">
+                        <!-- begin col-12 -->
+                        <h1 class="page-header">Take Backups <small> </small></h1>
+                        <!-- end page-header -->
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="panel panel-inverse">
+                                    <div class="panel-heading">
+                                        <div class="panel-heading-btn"></div>
+                                        <h4 class="panel-title">Backup</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <form method="post" action="./controller/getBackup">
+                                            <center> <button class="btn btn-primary" name="backup" id="backups">Download the Backup</button></center>
+                                        </form>
+                                        <!--							<img src="../img/gif/1.gif" id="wait1"  />-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- end col-12 -->
+                    </div>
+                    <!-- end row -->
+                    
+                    <div class="row">
+                        <!-- begin page-header -->
+                        <h1 class="page-header">Restore Backup File <small></small></h1>
+                        <!-- end page-header -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-inverse">
+                                    <div class="panel-heading">
+                                        <div class="panel-heading-btn"></div>
+                                        <h4 class="panel-title">Restore</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <center>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input type="file" id="resFile" class="form-control" name="restorefile" onchange="handleFiles(this.files)">
+                                            </div>
+                                            <input type="button" class="btn btn-warning" name="restore" id="restore" value="Restore the Backup">
+                                         </center>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                   
+                    
+                </div>
+                <!-- end #content -->
+
+                <!-- begin scroll to top btn -->
+                <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+                <!-- end scroll to top btn -->
+    </div>
+    <!-- end page container -->
+
+
+    
+    <!-- ================== BEGIN BASE JS ================== -->
+    <% include static/base.ejs %>
+        
+    <!-- ================== END PAGE LEVEL JS ================== -->
+
+        <script>
+            $(document).ready(function () {
+
+
+                App.init();
+                TableManageDefault.init();
+                
+
+
+            });
+        </script>
+        
+        <script>
+            
+            
+            $('#restore').click(function(){
+                
+                
+                var ext = $('#resFile').val().split('.').pop().toLowerCase();
+                if($.inArray(ext, ['sql']) == -1) {
+                    sweetAlert("Wrong File Type", "Please Select a .sql File! And Be Careful about the sql file!! This might impact on your original data", "error");
+                }else{
+                    
+                    
+                    
+                    swal({
+                      title: "Are you sure?",
+                      text: "Be Careful about the sql file!! This might impact on your original data",
+                      type: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#27a421",
+                      confirmButtonText: "Yes, Restore!"
+                    },
+                    function(){
+                      if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+                          alert('The File APIs are not fully supported in this browser.');
+                          return;
+                        }   
+
+                        input = document.getElementById('resFile');
+                        if (!input) {
+                          alert("Um, couldn't find the fileinput element.");
+                        }
+                        else if (!input.files) {
+                          alert("This browser doesn't seem to support the `files` property of file inputs.");
+                        }
+                        else if (!input.files[0]) {
+                          alert("Please select a file before clicking 'Load'");               
+                        }
+                        else {
+                          file = input.files[0];
+                          fr = new FileReader();
+                          fr.onload = receivedText;
+                          //fr.readAsText(file);
+                          fr.readAsBinaryString(file);
+                        }
+                    });
+                    
+                    
+                    
+                    
+                    
+                    
+                }
+                
+                
+//                    
+                });
+            
+            function receivedText() {
+                //document.getElementById('editor').appendChild(document.createTextNode(fr.result));
+                $.ajax({
+                    url: "./controller/restoreBackup",
+                    method: "POST",
+                    data:{file:fr.result},
+                    dataType:"text",
+                    success:function(html){
+                        var status = html;
+                        if( status == "true"){
+                            window.location.href='/admin/backup';
+                        }
+                        else{
+                            //window.location.href='error.php';
+                        }
+                    }
+                    
+                });
+              } 
+            
+            
+            
+            
+        </script>
+        
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '../../../../www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-53034621-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+
+
+
+
+</body>
+
+</html>

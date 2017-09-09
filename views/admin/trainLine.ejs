@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+
+    
+
+<head>
+    <% include static/head.ejs %>
+</head>
+
+<body>
+    
+    
+<!--    Send Notification   -->
+    <% if(status != ""){
+    %>
+            <script>
+                swal({
+                        title: '<%= status %>',
+                        text: '',
+                        type: 'success',
+                        confirmButtonText: 'Done!'
+                    },
+                    function () {});
+            </script>
+    <%
+        }
+        
+        status = "";
+
+    %>
+    
+    
+    <!-- begin #page-loader -->
+    <div id="page-loader" class="fade in"><span class="spinner"></span></div>
+    <!-- end #page-loader -->
+
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+        <!-- begin #header -->
+            <% include static/header.ejs %>
+        <!-- end #header -->
+
+            <!-- begin #sidebar -->
+                <% include static/navbar.ejs %>
+            <!-- end #sidebar -->
+
+                <!-- begin #content -->
+                <div id="content" class="content">
+
+                    <!-- begin breadcrumb -->
+                    <ol class="breadcrumb pull-right">
+                        <li><a href="">Home</a></li>
+                        <li><a href="">Train</a></li>
+                        <li class="active">Train Lines</li>
+                    </ol>
+                    <!-- end breadcrumb -->
+
+                    <h1 class="page-header">Train Lines</h1>
+                    <div class="row">
+                        <!-- begin col-12 -->
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <!-- begin panel -->
+                            <div class="panel panel-inverse">
+                                <div class="panel-heading">
+
+                                    <h4 class="panel-title">Train Lines Details</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal2"><i class="fa fa-plus"></i> Add New Line</button>
+                                    <br>
+                                    <br>
+
+                                    <table id="data-table" class="tableTrains table table-striped table-bordered">
+                                        <col width="50">
+                                            <col width="80">
+                                                <col width="80">
+                                                    <col width="50">
+                                                        <col width="50">
+                                                            <col width="50">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>ID </th>
+                                                                        <th>Line Name</th>
+                                                                        <th>No of Stations</th>
+                                                                        <th>Start Stations</th>
+                                                                        <th>End Stations</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <%
+                                                                            for (var i = 0; i < data.length; i++) { 
+                                                                                
+                                                                        %>
+                                                                        <tr data-id=" <%= data[i].lineId %>"  >
+                                                                            <td>
+                                                                                <%= data[i].lineId %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= data[i].name %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= data[i].noOfStation %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= data[i].start %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= data[i].end %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <form action="./controller/deleteLine" method="post" enctype="application/x-www-form-urlencoded"  >
+                                                                                    <button type="button" name="editHotel" onclick="getDetails(<%= data[i].lineId %>)" class="btn btn-primary btn-sm" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                                                                    <input class="form-control" type="hidden" name="lineId" data-parsley-required="true" value="<%= data[i].lineId %>" />
+                                                                                    <button type="submit" id="mf2" onclick="return confirm('Are you sure you want to delete ?');" class="btn btn-warning btn-sm"><i class="fa fa-trash-o"></i> Delete</button>                                                                                
+                                                                                </form>
+                                                                                
+                                                                            </td>
+                                                                        </tr>
+
+
+                                                                        <%    }
+                                                                        
+                                                                        %>
+
+                                                                </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <!-- end panel -->
+                        </div>
+                        <!-- end col-12 -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end #content -->
+
+                <!-- begin scroll to top btn -->
+                <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+                <!-- end scroll to top btn -->
+    </div>
+    <!-- end page container -->
+
+
+    <!-- ##################################################     modals      ######################################################### -->
+
+    <!--    New Line -->
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Insert New Train Line</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- begin col-6 -->
+                        <div class="col-md-12">
+                            <!-- begin panel -->
+                            <div class="panel panel-inverse" data-sortable-id="form-validation-1">
+                                <div class="panel-body panel-form">
+                                    <form class="form-horizontal form-bordered" action="./controller/insertLine" method="post" enctype="application/x-www-form-urlencoded" data-parsley-validate="true" name="demo-form1">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Line ID:</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="lineId" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Line Name :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="name" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">No Of Stations :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="noOfStation" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Start Station :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="start" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">End Station :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" name="end" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4"></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <button type="submit" class="btn btn-primary">Add to database</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end panel -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--    update Line -->
+    <div class="modal fade" id="myModal1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Train Line</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- begin col-6 -->
+                        <div class="col-md-12">
+                            <!-- begin panel -->
+                            <div class="panel panel-inverse" data-sortable-id="form-validation-1">
+                                <div class="panel-body panel-form">
+                                    <form class="form-horizontal form-bordered" action="./controller/updateLine" method="post" enctype="application/x-www-form-urlencoded" data-parsley-validate="true" name="demo-form1">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Line ID:</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" id="lineId123" name="lineId" data-parsley-required="true" readonly value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Line Name :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" id="name" name="name" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">No Of Stations :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" id="noOfStation" name="noOfStation" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">Start Station :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" id="start" name="start" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4">End Station :</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" type="text" id="end" name="end" data-parsley-required="true" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4 col-sm-4"></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <button type="submit" class="btn btn-primary">Update database</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end panel -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <% include static/base.ejs %>
+        <script>
+            
+            function getDetails(id){
+                $('#myModal1').modal({
+                    show: true
+                });
+                
+                $.ajax({
+                    url: './controller/getLine', 
+                    type: 'POST', 
+                    contentType: 'application/json', 
+                    data: JSON.stringify({lineId:id}),
+                    dataType: "json",
+                    success: function (response) {
+                       if (response.length > 0)
+                       {
+                          $.each(response, function(index, element) {
+                                $('#lineId123').val(element.lineId);
+                                $('#name').val(element.name);
+                                $('#noOfStation').val(element.noOfStation);
+                                $('#start').val(element.start);
+                                $('#end').val(element.end);
+                          });
+                       }
+                    }
+                    
+                    
+                    ,
+                    error:function()
+                    {
+                        alert("error");
+                    }
+                
+                })
+                
+                
+            
+            };
+            
+        </script>
+        <!-- ================== END PAGE LEVEL JS ================== -->
+
+        <script>
+            $(document).ready(function () {
+
+
+                App.init();
+                TableManageDefault.init();
+                
+
+
+            });
+        </script>
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '../../../../www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-53034621-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+
+
+
+
+</body>
+
+</html>
